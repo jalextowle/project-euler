@@ -53,7 +53,7 @@ pub const Arithmetic = struct {
         // supremum that we seek, s, will be equal to (b - k) / d if the
         // division rounds down, and it will be equal to (b - k) / d - 1 if
         // the division doesn't round down.
-        if (b - self.k % self.d == 0) {
+        if ((b - self.k) % self.d == 0) {
             return (b - self.k) / self.d - 1;
         }
         return (b - self.k) / self.d;
@@ -94,6 +94,10 @@ pub const Arithmetic = struct {
     // numbers. Since we can compute triangular numbers in constant time, we can
     // compute arithmetic series in constant time.
     pub fn sum(self: Arithmetic, s: u64, e: u64) u64 {
+        // FIXME: Is this what we want to do?
+        if (e < s) {
+            return 0;
+        }
         return (e - s + 1) * (self.k + s * self.d) + triangular(e - s) * self.d;
     }
 };
@@ -109,7 +113,11 @@ test "Arithmetic.sup" {
         if (sequence.at(0) > b) {
             try std.testing.expectEqual(s, 0);
         } else {
+            // Ensure the element of the sequence at s is less than b.
             try std.testing.expect(sequence.at(s) < b);
+
+            // Ensure the element of the sequence at s + 1 is greater than b.
+            try std.testing.expect(sequence.at(s + 1) > b);
         }
     }
 }
