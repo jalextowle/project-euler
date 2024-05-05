@@ -4,6 +4,8 @@ const Allocator = @import("std").mem.Allocator;
 const ArrayList = @import("std").ArrayList;
 const HashMap = @import("std").AutoHashMap;
 
+// TODO: Replace the HashMap with a BitSet for efficiency.
+//
 // Find all of the primes below the bound using the Sieve of Eratosthenes.
 pub fn primes(allocator: Allocator, bound: u64) !ArrayList(u64) {
     // Instantiate a hashmap for the composites added to the sieve and the list
