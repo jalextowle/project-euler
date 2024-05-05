@@ -1,5 +1,6 @@
 // Utilities for different kinds of sequences including arithmetic sequences.
 const std = @import("std");
+const math = std.math;
 
 // FIXME: Another cool function would be a function that takes two arithmetic
 // sequences and adds or subtracts them. I have a feeling that this works out
@@ -181,5 +182,53 @@ test "triangular" {
         }
         const actual = triangular(n);
         try std.testing.expectEqual(expected, actual);
+    }
+}
+
+// TODO: Implement this with math.big.Int and math.big.Rational to support large
+// values of the fibonnaci sequence. This performs well up to a point, and then
+// it begins to lose accuracy.
+//
+// The fibonacci sequence is an old and famous sequence. The first two elements
+// of the sequence are f(1) = 1 and f(2) = 1. For n > 2, f(n) is recursively as:
+//
+// f(n) = f(n - 1) + f(n - 2)
+//
+// The brute force algorithm can be computed in O(2^n), and memoization can drop
+// this to O(n^2). A better and more beautiful result can be found by analyzing
+// the matrix equation:
+//
+// ( f(n + 2) ) = ( 1 1 ) ( f(n + 1) )
+// ( f(n + 1) )   ( 1 0 ) (   f(n)   )
+//
+// By diagonalizing this matrix, we can arrive at Binet's Formula:
+//
+// f(n) = floor(((1 + sqrt(5)) / 2)^n / sqrt(5))
+pub fn fibonacci(n: u128) u128 {
+    const f = math.pow(f64, math.phi, @floatFromInt(n)) / math.sqrt(5.0);
+    if (math.modf(f).fpart >= 0.5) {
+        return @intFromFloat(math.ceil(f));
+    } else {
+        return @intFromFloat(math.floor(f));
+    }
+}
+
+// This is a brute force implementation of the fibonacci sequence to test
+// against the implementation that uses Binet's formula. This shouldn't be used
+// outside of testing.
+fn fibonacci_brute_force(n: u64) u64 {
+    if (n == 1) {
+        return 1;
+    }
+    if (n == 2) {
+        return 1;
+    }
+    return fibonacci_brute_force(n - 1) + fibonacci_brute_force(n - 2);
+}
+
+test "fibonacci" {
+    const cases = [_]u64{ 1, 5, 10, 15, 20, 30 };
+    for (cases) |n| {
+        try std.testing.expectEqual(fibonacci_brute_force(n), fibonacci(n));
     }
 }
