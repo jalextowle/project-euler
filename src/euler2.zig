@@ -28,6 +28,9 @@ pub fn solver(bound: u64) u64 {
 }
 
 test "euler2" {
+    // Ensure that the function returns the correct result on the example.
     try std.testing.expectEqual(44, solver(100));
+
+    // Ensure that the function returns the correct result on the real problem.
     try std.testing.expectEqual(4_613_732, solver(4_000_000));
 }

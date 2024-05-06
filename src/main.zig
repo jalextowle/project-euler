@@ -2,6 +2,7 @@ const std = @import("std");
 const euler1 = @import("euler1.zig");
 const euler2 = @import("euler2.zig");
 const euler3 = @import("euler3.zig");
+const euler4 = @import("euler4.zig");
 
 pub fn main() !void {
     // Initialize the allocator.
@@ -23,5 +24,10 @@ pub fn main() !void {
     {
         const solution = try euler3.solver(allocator, 600_851_475_143);
         std.debug.print("euler #3 = {d}\n", .{solution});
+    }
+
+    // Euler #4
+    {
+        std.debug.print("euler #4 = {d}\n", .{euler4.solver(4)});
     }
 }
