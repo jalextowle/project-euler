@@ -1,14 +1,14 @@
 const Allocator = @import("std").mem.Allocator;
-const factorization = @import("./prime.zig").factorization;
+const factors = @import("./prime.zig").factors;
 
 // What is the largest prime factor of the number 600,851,475,143?
 pub fn solver(allocator: Allocator, n: u64) !u64 {
-    // Get the prime factorization of n.
-    var factors = try factorization(allocator, n);
-    defer factors.deinit();
+    // Get the prime factors of n.
+    var fs = try factors(allocator, n);
+    defer fs.deinit();
 
-    // Return the last element of the factorization.
-    return factors.pop();
+    // Return the last element of the factors.
+    return fs.pop();
 }
 
 test "euler3" {
